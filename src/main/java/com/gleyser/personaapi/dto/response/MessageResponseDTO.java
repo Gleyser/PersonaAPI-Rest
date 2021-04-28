@@ -1,4 +1,4 @@
-package com.gleyser.personaapi.dto;
+package com.gleyser.personaapi.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
