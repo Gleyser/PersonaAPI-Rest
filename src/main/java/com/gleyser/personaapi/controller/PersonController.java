@@ -20,14 +20,12 @@ public class PersonController {
     @Autowired
     public PersonController(PersonService personService){
         this.personService =personService;
-}
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
         return this.personService.createPerson(personDTO);
-
-
     }
 
     @GetMapping
@@ -45,6 +43,12 @@ public class PersonController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
         this.personService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+        return this.personService.updateById(id, personDTO);
+
     }
 }
 

@@ -26,11 +26,8 @@ public class PersonService {
     public MessageResponseDTO createPerson(PersonDTO personDTO) {
         Person personToSave = this.personMapper.toModel(personDTO);
         Person savedPerson = this.personRepository.save(personToSave);
-        return MessageResponseDTO
-                .builder()
-                .message("Created person with ID" + savedPerson.getId())
-                .build();
-
+        String message = "Created person with id ";
+        return createMessageResponse(savedPerson.getId(), message);
     }
 
     public List<PersonDTO> listAll(){
@@ -38,31 +35,39 @@ public class PersonService {
         return allPeople.stream()
                 .map(this.personMapper::toDTO)
                 .collect(Collectors.toList());
-
     }
 
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-//        Optional<Person> optionalPerson = this.personRepository.findById(id);
-//
-//        if (optionalPerson.isEmpty()){
-//            throw new PersonNotFoundException(id);
-//        }
-
         Person person = verifyIfExists(id);
-
         return this.personMapper.toDTO(person);
+    }
 
+
+
+    public void delete(Long id) throws PersonNotFoundException {
+        verifyIfExists(id);
+        this.personRepository.deleteById(id);
+    }
+
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        Person personToUpdate = this.personMapper.toModel(personDTO);
+        Person updatedPerson = this.personRepository.save(personToUpdate);
+        String message = "Updated person with id ";
+        return createMessageResponse(updatedPerson.getId(), message);
+    }
+
+    private MessageResponseDTO createMessageResponse(Long id, String message) {
+        return MessageResponseDTO
+                .builder()
+                .message(message + id)
+                .build();
     }
 
     private Person verifyIfExists(Long id) throws PersonNotFoundException {
         return this.personRepository.findById(id)
                 .orElseThrow( () -> new PersonNotFoundException(id));
-    }
-
-    public void delete(Long id) throws PersonNotFoundException {
-        Person person = verifyIfExists(id);
-        this.personRepository.deleteById(id);
-
     }
 }
