@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,13 +43,26 @@ public class PersonService {
 
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Optional<Person> optionalPerson = this.personRepository.findById(id);
+//        Optional<Person> optionalPerson = this.personRepository.findById(id);
+//
+//        if (optionalPerson.isEmpty()){
+//            throw new PersonNotFoundException(id);
+//        }
 
-        if (optionalPerson.isEmpty()){
-            throw new PersonNotFoundException(id);
-        }
+        Person person = verifyIfExists(id);
 
-        return this.personMapper.toDTO(optionalPerson.get());
+        return this.personMapper.toDTO(person);
+
+    }
+
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return this.personRepository.findById(id)
+                .orElseThrow( () -> new PersonNotFoundException(id));
+    }
+
+    public void delete(Long id) throws PersonNotFoundException {
+        Person person = verifyIfExists(id);
+        this.personRepository.deleteById(id);
 
     }
 }
