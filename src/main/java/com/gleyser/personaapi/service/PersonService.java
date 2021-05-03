@@ -20,7 +20,7 @@ public class PersonService {
     }
 
     public MessageResponseDTO createPerson(PersonDTO personDTO) {
-        Person personToSave = personMapper.toModel(personDTO);
+        Person personToSave = this.personMapper.toModel(personDTO);
         Person savedPerson = this.personRepository.save(personToSave);
         return MessageResponseDTO
                 .builder()

@@ -1,6 +1,5 @@
 package com.gleyser.personaapi.entity;
 
-import com.gleyser.personaapi.enums.PhoneType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +29,7 @@ public class Person {
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,  CascadeType.PERSIST, CascadeType.REMOVE})
