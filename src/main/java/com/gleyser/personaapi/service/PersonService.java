@@ -3,12 +3,14 @@ package com.gleyser.personaapi.service;
 import com.gleyser.personaapi.dto.request.PersonDTO;
 import com.gleyser.personaapi.dto.response.MessageResponseDTO;
 import com.gleyser.personaapi.entity.Person;
+import com.gleyser.personaapi.exception.PersonNotFoundException;
 import com.gleyser.personaapi.mapper.PersonMapper;
 import com.gleyser.personaapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,4 +43,14 @@ public class PersonService {
     }
 
 
+    public PersonDTO findById(Long id) throws PersonNotFoundException {
+        Optional<Person> optionalPerson = this.personRepository.findById(id);
+
+        if (optionalPerson.isEmpty()){
+            throw new PersonNotFoundException(id);
+        }
+
+        return this.personMapper.toDTO(optionalPerson.get());
+
+    }
 }

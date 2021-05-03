@@ -2,6 +2,7 @@ package com.gleyser.personaapi.controller;
 
 import com.gleyser.personaapi.dto.request.PersonDTO;
 import com.gleyser.personaapi.dto.response.MessageResponseDTO;
+import com.gleyser.personaapi.exception.PersonNotFoundException;
 import com.gleyser.personaapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,11 @@ public class PersonController {
     @GetMapping
     public List<PersonDTO> listAll(){
         return this.personService.listAll();
+    }
 
+    @GetMapping("/{id}")
+    public PersonDTO finById(@PathVariable Long id) throws PersonNotFoundException {
+        return this.personService.findById(id);
 
     }
 }
