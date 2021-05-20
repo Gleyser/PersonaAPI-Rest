@@ -43,8 +43,6 @@ public class PersonService {
         return this.personMapper.toDTO(person);
     }
 
-
-
     public void delete(Long id) throws PersonNotFoundException {
         verifyIfExists(id);
         this.personRepository.deleteById(id);
